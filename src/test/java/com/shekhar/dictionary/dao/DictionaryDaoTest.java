@@ -17,17 +17,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.shekhar.dictionary.WordMeaningPair;
-import com.shekhar.dictionary.config.DictionaryConfig;
 import com.shekhar.dictionary.config.LocalRedisConfig;
 
-@ContextConfiguration(classes = { DictionaryConfig.class,
-		LocalRedisConfig.class })
-@ActiveProfiles("local")
+@ContextConfiguration(classes = {LocalRedisConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DictionaryDaoTest {
 
@@ -46,7 +42,7 @@ public class DictionaryDaoTest {
 	public void testAddWordWithItsMeaningToDictionary() {
 		String meaning = "To move forward with a bounding, drooping motion.";
 		Long index = dictionaryDao.addWordWithItsMeaningToDictionary("lollop",
-				meaning, "verb");
+				meaning);
 		assertThat(index, is(notNullValue()));
 		assertThat(index, is(equalTo(1L)));
 		List<String> allMeanings = dictionaryDao
@@ -57,11 +53,11 @@ public class DictionaryDaoTest {
 	@Test
 	public void shouldAddMeaningToAWordIfItExists() {
 		Long index = dictionaryDao.addWordWithItsMeaningToDictionary("lollop",
-				"To move forward with a bounding, drooping motion.", "verb");
+				"To move forward with a bounding, drooping motion.");
 		assertThat(index, is(notNullValue()));
 		assertThat(index, is(equalTo(1L)));
 		index = dictionaryDao.addWordWithItsMeaningToDictionary("lollop",
-				"To hang loosely; droop; dangle.", "verb");
+				"To hang loosely; droop; dangle.");
 		assertThat(index, is(equalTo(2L)));
 	}
 
@@ -126,16 +122,16 @@ public class DictionaryDaoTest {
 	private void setupTwoWords() {
 		setupOneWord();
 		dictionaryDao.addWordWithItsMeaningToDictionary("fain",
-				"Content; willing.", "adjective");
+				"Content; willing.");
 		dictionaryDao.addWordWithItsMeaningToDictionary("fain",
-				"Archaic: Constrained; obliged.", "adjective");
+				"Archaic: Constrained; obliged.");
 	}
 
 	private void setupOneWord() {
 		dictionaryDao.addWordWithItsMeaningToDictionary("lollop",
-				"To move forward with a bounding, drooping motion.", "verb");
+				"To move forward with a bounding, drooping motion.");
 		dictionaryDao.addWordWithItsMeaningToDictionary("lollop",
-				"To hang loosely; droop; dangle.", "verb");
+				"To hang loosely; droop; dangle.");
 	}
 
 }

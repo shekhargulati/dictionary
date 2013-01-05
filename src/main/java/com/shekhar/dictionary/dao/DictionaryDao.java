@@ -23,13 +23,9 @@ public class DictionaryDao {
 		this.redisTemplate = redisTemplate;
 	}
 	
-	public Long addWordWithItsMeaningToDictionary(String word, String meaning,
-			String partOfSpeech) {
-		// System.out.println("word : " + word + " , meaning : " + meaning
-		// + " , partOfSpeech : " + partOfSpeech);
+	public Long addWordWithItsMeaningToDictionary(String word, String meaning) {
 		Long index = redisTemplate.opsForList().rightPush(word, meaning);
 		redisTemplate.opsForSet().add(ALL_UNIQUE_WORDS, word);
-		redisTemplate.opsForSet().add(partOfSpeech, word);
 		return index;
 	}
 
@@ -66,23 +62,8 @@ public class DictionaryDao {
 		return wordMeaningPair;
 	}
 
-	public Set<String> fetchAllWordsThatHavePartOfSpeech(String partOfSpeech) {
-		return redisTemplate.opsForSet().members(partOfSpeech);
-	}
-
-	public Set<String> findWordWhichAre(String partOfSpeech1,
-			String... partOfSpeeches) {
-		return redisTemplate.opsForSet().intersect(partOfSpeech1,
-				Arrays.asList(partOfSpeeches));
-	}
-
 	public Long countOfMembersInASet(String key) {
 		return redisTemplate.opsForSet().size(key);
 	}
 
-	public Set<String> findWordsThatCanBeEitherOrBoth(String partOfSpeech,
-			String... partOfSpeeches) {
-		return redisTemplate.opsForSet().union(partOfSpeech,
-				Arrays.asList(partOfSpeeches));
-	}
 }
